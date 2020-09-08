@@ -1,4 +1,0 @@
-Codigo Carrera :1
-Nombre Carrera :sistemas
-Jornada:  noche
-Sede: chapinero
