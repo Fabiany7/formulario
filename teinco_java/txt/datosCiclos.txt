@@ -1,0 +1,6 @@
+Codigo Ciclo :1
+Nombre Ciclo :Tecnico
+Codigo Ciclo :5
+Nombre Ciclo :Tecnologo
+Codigo Ciclo :7
+Nombre Ciclo :Ingenieria
