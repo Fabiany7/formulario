@@ -1,0 +1,3 @@
+Codigo Semestre :6
+Nombre Semestres :semestre
+Ciclo:  Tecnologo

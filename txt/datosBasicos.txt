@@ -1,0 +1,7 @@
+Nombre :omar
+Apellido :madrigal
+Documento:  10123499945
+Genero: MASCULINONombre :fabiany
+Apellido :madrigal
+Documento:  123456
+Genero: MASCULINO
