@@ -88,7 +88,7 @@ class PanelMenuCarrera extends JPanel implements ActionListener, ChangeListener 
 class AgregarCarrera implements ActionListener {
     ArrayList<JTextField> datos = new ArrayList<JTextField>();
     Carreras carreras = new Carreras();
-    Writer writer = new FileWriter("//home//fmadrigal//Escritorio//teinco_java//txt//datosCarrera.txt");
+    Writer writer = new FileWriter("./txt/datosCarrera.txt",true);
 
     public AgregarCarrera(JTextField inCodigo,JTextField inNombre,JTextField inJornada,JTextField inSede) throws IOException {
         this.datos.add(inCodigo);
@@ -105,8 +105,11 @@ class AgregarCarrera implements ActionListener {
          carreras.setNombreSede(datos.get(3).getText());
 
         try {
-            writer.write("Codigo Carrera :" + carreras.getCodigoCarrera() + "\n"+ "Nombre Carrera :" + carreras.getNombreCarrera() +"\n" +"Jornada:  "+carreras.getJornada() + "\n" + "Sede: "+ carreras.getNombreSede());
-            writer.close();
+            writer.write(carreras.getCodigoCarrera() + ";" + carreras.getNombreCarrera() +";" +carreras.getJornada() + ";" + carreras.getNombreSede() + "\n");
+            writer.flush();
+            for (int i = 0 ; i < datos.size(); i++){
+                datos.get(i).setText("");
+            }
         } catch (IOException ioException) {
             ioException.printStackTrace();
         }

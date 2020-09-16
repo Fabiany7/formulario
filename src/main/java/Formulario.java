@@ -1,16 +1,12 @@
-import java.util.Arrays;
-import java.util.List;
+import org.apache.log4j.BasicConfigurator;
 
 public class Formulario {
 
 
     public static void main(String[] args) {
-
+        BasicConfigurator.configure();
         ViewMenuPrincipal viewMenuPrincipal = new ViewMenuPrincipal();
         viewMenuPrincipal.setVisible(true);
-        List<String> stooges = Arrays.asList ("Larry", "Moe", "Curly");
-        System.out.println("array");
-        System.out.println(stooges);
     }
 
 }

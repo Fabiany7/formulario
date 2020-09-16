@@ -1,12 +1,13 @@
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.Writer;
+import java.io.*;
+import java.nio.channels.FileChannel;
+import java.nio.channels.FileLock;
 import java.util.ArrayList;
 
 import org.apache.log4j.Logger;
@@ -35,6 +36,7 @@ class PanelMenuCiclos extends JPanel implements ActionListener, ChangeListener {
     JTextField inNameCiclo;
 
     public PanelMenuCiclos() throws IOException {
+
         setLayout(null);
         txtTitulo = new JLabel("CREAR CICLOS");
         txtTitulo.setBounds(250, 10, 150, 30);
@@ -77,7 +79,7 @@ class PanelMenuCiclos extends JPanel implements ActionListener, ChangeListener {
     }
 }
 class AgregarCiclo implements ActionListener {
-    Writer writer = new FileWriter("//home//fmadrigal//Escritorio//teinco_java//txt//datosCiclos.txt");
+    Writer writer = new FileWriter("./txt/datosCiclos.txt", true);
     Ciclos ciclos = new Ciclos();
     ArrayList<JTextField> datos = new ArrayList<JTextField>();
     private static final Logger LOGGER = Logger.getLogger(AgregarCiclo.class);
@@ -89,15 +91,26 @@ class AgregarCiclo implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-
         ciclos.setCodigoCiclo(datos.get(0).getText());
         ciclos.setNombreCiclo(datos.get(1).getText());
         try {
-            writer.write("Codigo Ciclo :" + ciclos.getCodigoCiclo() + "\n"+ "Nombre Ciclo :" + ciclos.getNombreCiclo());
-            writer.close();
+            writer.write(ciclos.getCodigoCiclo() + ";"+ciclos.getNombreCiclo()+ "\n");
+            writer.flush();
+            datos.get(0).setText("");
+            datos.get(1).setText("");
         } catch (IOException e1) {
             LOGGER.error("Error al intentar escribir o cerrar ",e1);
+        }catch (Exception ex){
+            LOGGER.error("fallo en proceso", ex);
         }
 
+    }
+    public void  checkOpen(){
+        try {
+            Writer writer2 = new FileWriter("./txt/datosCiclos.txt", true);
+            System.out.println("ok");
+        }catch (Exception e){
+            LOGGER.error("archivo");
+        }
     }
 }

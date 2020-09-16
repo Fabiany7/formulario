@@ -5,15 +5,17 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
 import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.log4j.Logger;
 
 public class ViewDatosBasicos extends JFrame {
 
     public ViewDatosBasicos() throws IOException {
 
-        setSize(600, 300);
+        setSize(600, 550);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLocation(400, 200);
+        setLocation(400, 100);
         setTitle("datos basicos");
         PanelMenu panel = new PanelMenu();
         add(panel);
@@ -35,7 +37,9 @@ class PanelMenu extends JPanel implements ActionListener, ChangeListener {
     JLabel txtGenero;
     JRadioButton opFemenino;
     JRadioButton opMasculino;
-
+    JComboBox actividades;
+    JComboBox carreras;
+    JComboBox semestres;
 
     public PanelMenu() throws IOException {
 
@@ -72,18 +76,81 @@ class PanelMenu extends JPanel implements ActionListener, ChangeListener {
         opMasculino.setBounds(320, 170, 150, 30);
         opMasculino.addChangeListener(this);
         add(opMasculino);
+        // definicion de actividad economica
+        txtGenero = new JLabel("Actividad: ");
+        txtGenero.setBounds(60, 200, 150, 30);
+        add(txtGenero);
+        // combo box actividad economica
+        String s1[] = {"Empleado","Estudiante","Independiente","Trabajador"};
+        actividades = new JComboBox(s1);
+        actividades.setBounds(160,210,150,20);
+        add(actividades);
+        // fin actividades
+        // definicion de actividad Carrera
+        txtGenero = new JLabel("Carrera: ");
+        txtGenero.setBounds(60, 240, 150, 30);
+        add(txtGenero);
+        // combo box Carrera
+        List<String> listaCar = new ArrayList<>();
+        recCarrera().stream().forEach((x) -> listaCar.add(x.split(",")[1]) );
+        carreras = new JComboBox(listaCar.toArray());
+        carreras.setBounds(160,250,150,20);
+        add(carreras);
+        // fin carreras
+        // definicion de actividad Semestre
+        txtGenero = new JLabel("Semestre: ");
+        txtGenero.setBounds(60, 280, 150, 30);
+        add(txtGenero);
+        // combo box Semestre
+        List<String> listaSem = new ArrayList<>();
+        recCarrera().stream().forEach((x) -> listaSem.add(x.split(",")[1]) );
+        semestres = new JComboBox(listaSem.toArray());
+        semestres.setBounds(160,290,150,20);
+        add(semestres);
+        // fin carreras
         boton1 = new JButton("AGREGAR");
-        boton1.setBounds(50, 230, 150, 30);
+        boton1.setBounds(50, 370, 150, 30);
         boton1.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         boton1.addActionListener(new Agregar(inName, inLastName, inDocumento));
         add(boton1);
         boton2 = new JButton("CERRAR");
-        boton2.setBounds(380, 230, 150, 30);
+        boton2.setBounds(380, 370, 150, 30);
         boton2.addActionListener(this);
         boton2.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         add(boton2);
 
 
+    }
+
+    public List<String> recSemestre(){
+        List<String> semestres = new ArrayList<>();
+        try {
+            FileReader FR = new FileReader("./txt/datosSemestre.txt");
+            BufferedReader BR = new BufferedReader(FR);
+            String dato = "";
+            while ((dato = BR.readLine() ) != null ){
+                semestres.add(dato);
+            }
+        }catch (IOException e){
+            JOptionPane.showMessageDialog(null,"error al leer semestres " + e.getLocalizedMessage());
+        }
+        return semestres;
+    }
+
+    public List<String> recCarrera(){
+
+        List<String> carreras = new ArrayList<>();
+        try {
+            FileReader FR = new FileReader("./txt/datosCarrera.txt");
+            BufferedReader BR = new BufferedReader(FR);
+            String dato = "";
+            while ((dato = BR.readLine() ) != null ){
+                carreras.add(dato);
+            }
+        }catch (IOException e){
+            JOptionPane.showMessageDialog(null,"error al leer semestres " + e.getLocalizedMessage());
+        }
+        return carreras;
     }
 
     public void stateChanged(ChangeEvent e) {
@@ -113,7 +180,7 @@ class PanelMenu extends JPanel implements ActionListener, ChangeListener {
 class Agregar implements ActionListener {
     private static Estudiante estude = new Estudiante();
     ArrayList<JTextField> datos = new ArrayList<JTextField>();
-    Writer writer = new FileWriter("//home//fmadrigal//Escritorio//teinco_java//txt//datosBasicos.txt",true);
+    Writer writer = new FileWriter("./txt/datosBasicos.txt",true);
     private static final Logger LOGGER = Logger.getLogger(Agregar.class);
 
     public Agregar(JTextField name, JTextField lastName, JTextField documento) throws IOException {
@@ -128,7 +195,8 @@ class Agregar implements ActionListener {
         estude.setApellido(datos.get(1).getText());
         estude.setDocumento(datos.get(2).getText());
         try {
-            writer.write("Nombre :" + estude.getNombre() + "\n"+ "Apellido :" + estude.getApellido() +"\n" +"Documento:  "+estude.getDocumento()+ "\n" + "Genero: "+ estude.getSexo());
+//            writer.write("Nombre :" + estude.getNombre() + "\n"+ "Apellido :" + estude.getApellido() +"\n" +"Documento:  "+estude.getDocumento()+ "\n" + "Genero: "+ estude.getSexo());
+            writer.write(estude.getNombre() + ";" +estude.getApellido()+ ";" +estude.getDocumento()+ ";" +estude.getSexo()+ "\n");
             writer.close();
         } catch (IOException e1) {
             LOGGER.error( "ERROR AL CERRAR WRITER ",e1 );
