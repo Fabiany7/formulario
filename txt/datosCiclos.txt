@@ -1,6 +1,5 @@
-Codigo Ciclo :1
-Nombre Ciclo :Tecnico
-Codigo Ciclo :5
-Nombre Ciclo :Tecnologo
-Codigo Ciclo :7
-Nombre Ciclo :Ingenieria
+1;Técnico
+2;Tecnológico
+3;Profesional
+4;Especialización
+5;Maestria

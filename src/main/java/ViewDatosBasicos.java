@@ -1,14 +1,13 @@
-import org.apache.log4j.Logger;
-
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.apache.log4j.Logger;
 
 public class ViewDatosBasicos extends JFrame {
 
@@ -126,7 +125,7 @@ class PanelMenu extends JPanel implements ActionListener, ChangeListener {
     public List<String> recSemestre(){
         List<String> semestres = new ArrayList<>();
         try {
-            FileReader FR = new FileReader("C:\\Users\\Dalkien\\Documents\\Sexto Semestre\\Electiva III\\repo\\txt\\datosSemestre.txt");
+            FileReader FR = new FileReader("./txt/datosSemestre.txt");
             BufferedReader BR = new BufferedReader(FR);
             String dato = "";
             while ((dato = BR.readLine() ) != null ){
@@ -142,7 +141,7 @@ class PanelMenu extends JPanel implements ActionListener, ChangeListener {
 
         List<String> carreras = new ArrayList<>();
         try {
-            FileReader FR = new FileReader("C:\\Users\\Dalkien\\Documents\\Sexto Semestre\\Electiva III\\repo\\txt\\datosCarrera.txt");
+            FileReader FR = new FileReader("./txt/datosCarrera.txt");
             BufferedReader BR = new BufferedReader(FR);
             String dato = "";
             while ((dato = BR.readLine() ) != null ){
@@ -181,7 +180,7 @@ class PanelMenu extends JPanel implements ActionListener, ChangeListener {
 class Agregar implements ActionListener {
     private static Estudiante estude = new Estudiante();
     ArrayList<JTextField> datos = new ArrayList<JTextField>();
-    Writer writer = new FileWriter("C:\\Users\\Dalkien\\Documents\\Sexto Semestre\\Electiva III\\repo\\teinco_java\\txt\\datosBasicos.txt",true);
+    Writer writer = new FileWriter("./txt/datosBasicos.txt",true);
     private static final Logger LOGGER = Logger.getLogger(Agregar.class);
 
     public Agregar(JTextField name, JTextField lastName, JTextField documento) throws IOException {
@@ -196,7 +195,8 @@ class Agregar implements ActionListener {
         estude.setApellido(datos.get(1).getText());
         estude.setDocumento(datos.get(2).getText());
         try {
-            writer.write("Nombre :" + estude.getNombre() + "\n"+ "Apellido :" + estude.getApellido() +"\n" +"Documento:  "+estude.getDocumento()+ "\n" + "Genero: "+ estude.getSexo());
+//            writer.write("Nombre :" + estude.getNombre() + "\n"+ "Apellido :" + estude.getApellido() +"\n" +"Documento:  "+estude.getDocumento()+ "\n" + "Genero: "+ estude.getSexo());
+            writer.write(estude.getNombre() + ";" +estude.getApellido()+ ";" +estude.getDocumento()+ ";" +estude.getSexo()+ "\n");
             writer.close();
         } catch (IOException e1) {
             LOGGER.error( "ERROR AL CERRAR WRITER ",e1 );

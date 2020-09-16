@@ -1,6 +1,7 @@
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -22,7 +23,7 @@ public class ViewSemestres extends JFrame{
 }
 class PanelMenuSemestre extends JPanel implements ActionListener, ChangeListener {
 
-    Reader reader = new FileReader("//home//fmadrigal//Escritorio//teinco_java//txt//datosCiclos.txt");
+    Reader reader = new FileReader("./txt/datosCiclos.txt");
     BufferedReader br = new BufferedReader(reader);
     String linea;
     String select = "tecnico";
@@ -35,6 +36,7 @@ class PanelMenuSemestre extends JPanel implements ActionListener, ChangeListener
     JTextField inNombre;
     JLabel txtCiclo;
     JComboBox inCiclo;
+    DefaultTableModel tableModel;
 
     public PanelMenuSemestre() throws IOException {
         setLayout(null);
@@ -101,7 +103,7 @@ class AgregarSemestre implements ActionListener {
     Ciclos ciclos = new Ciclos();
     Semestre semestre = new Semestre();
     private static String inCiclo;
-    Writer writer = new FileWriter("//home//fmadrigal//Escritorio//teinco_java//txt//datosSemestre.txt");
+    Writer writer = new FileWriter("./txt/datosSemestre.txt",true);
 
     public AgregarSemestre(JTextField inCodigo,JTextField inNombre) throws IOException {
         this.datos.add(inCodigo);
@@ -119,8 +121,10 @@ class AgregarSemestre implements ActionListener {
         semestre.setCiclos(ciclos);
 
         try {
-            writer.write("Codigo Semestre :" + semestre.getSemestre() + "\n"+ "Nombre Semestres :" + semestre.getPeriodo()+"\n" +"Ciclo:  "+semestre.getCiclos().getNombreCiclo()+ "\n" );
-            writer.close();
+            writer.write( semestre.getSemestre()+ ";" +semestre.getPeriodo()+ ";" +semestre.getCiclos().getNombreCiclo()+ "\n" );
+            writer.flush();
+            datos.get(0).setText("");
+            datos.get(1).setText("");
         } catch (IOException ioException) {
             ioException.printStackTrace();
         }

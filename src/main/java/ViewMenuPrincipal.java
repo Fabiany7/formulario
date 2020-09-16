@@ -100,7 +100,7 @@ class PanelMenuInicio extends JPanel implements ActionListener, ChangeListener {
                 ioException.printStackTrace();
             }
         }
-             if(btnPulsado == btnCiclos){
+        if(btnPulsado == btnCiclos){
             ViewCiclos viewCiclos = null;
             try {
                 viewCiclos = new ViewCiclos();
