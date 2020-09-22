@@ -9,9 +9,9 @@ import java.util.ArrayList;
 
 public class ViewCarreras extends JFrame{
     public ViewCarreras() throws IOException {
-        setSize(600, 300);
+        setSize(600, 550);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLocation(400, 200);
+        setLocation(400, 100);
         setTitle("Carreras");
         PanelMenuCarrera panel = new PanelMenuCarrera();
         add(panel);

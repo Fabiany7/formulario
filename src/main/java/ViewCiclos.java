@@ -25,7 +25,7 @@ public class ViewCiclos extends JFrame{
     public ViewCiclos() throws IOException {
         setSize(600, 550);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLocation(400, 200);
+        setLocation(400, 100);
         setTitle("ciclos");
         PanelMenuCiclos panel = new PanelMenuCiclos();
         add(panel);
@@ -63,12 +63,12 @@ class PanelMenuCiclos extends JPanel implements ActionListener, ChangeListener {
         inNameCiclo.setBounds(180, 98, 150, 20);
         add(inNameCiclo);
         boton1 = new JButton("AGREGAR");
-        boton1.setBounds(50, 230, 150, 30);
+        boton1.setBounds(50, 430, 150, 30);
         boton1.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         boton1.addActionListener(new AgregarCiclo(inCodeCiclo,inNameCiclo));
         add(boton1);
         boton2 = new JButton("CERRAR");
-        boton2.setBounds(380, 230, 150, 30);
+        boton2.setBounds(380, 430, 150, 30);
         boton2.addActionListener(this);
         boton2.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         add(boton2);
@@ -88,7 +88,7 @@ class PanelMenuCiclos extends JPanel implements ActionListener, ChangeListener {
         Border b = BorderFactory.createLineBorder(Color.black);
         table.setBorder(b);
         JInternalFrame ifm= new JInternalFrame();
-        ifm.setBounds(130,280,350,180);
+        ifm.setBounds(130,180,350,180);
         JScrollPane sp = new JScrollPane(table);
         ifm.add(sp);
         ifm.setVisible(true);

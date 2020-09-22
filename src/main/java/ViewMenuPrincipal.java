@@ -11,9 +11,9 @@ import java.io.IOException;
 public class ViewMenuPrincipal extends JFrame{
 
     public ViewMenuPrincipal() {
-        setSize(600, 300);
+        setSize(600, 550);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLocation(400, 200);
+        setLocation(400, 100);
         setTitle("formulario estudiante");
         PanelMenuInicio panel = new PanelMenuInicio();
         add(panel);

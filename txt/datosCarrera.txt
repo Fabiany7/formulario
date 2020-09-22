@@ -1,0 +1,4 @@
+1;sistemas;noche;chapinero
+2;contabilidad;noche;chapinero
+3;sistemas;mañana;chapinero
+4;Diseño;noche;chapinero
