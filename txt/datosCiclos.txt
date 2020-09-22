@@ -4,3 +4,5 @@
 4;Especialización
 5;Maestria
 
+1;Técnico
+111222213424;1213443132424

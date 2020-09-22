@@ -10,6 +10,8 @@ import javax.swing.table.TableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.io.*;
 import java.nio.channels.FileChannel;
 import java.nio.channels.FileLock;
@@ -77,8 +79,22 @@ class PanelMenuCiclos extends JPanel implements ActionListener, ChangeListener {
         //table.getSelectionModel().addListSelectionListener(new SeleccionaCiclo(inCodeCiclo,inNameCiclo));
         table.getSelectionModel().addListSelectionListener(e -> {
             if (table.getSelectedRow() > -1){
+                System.out.println(table.getSelectedRow());
                 inNameCiclo.setText(table.getValueAt(table.getSelectedRow(), 1).toString()) ;
                 inCodeCiclo .setText(table.getValueAt(table.getSelectedRow(), 0).toString()) ;
+                boton1.setEnabled(false);
+            }
+
+        });
+        table.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                boton1.setEnabled(true);
             }
         });
         tableModel.addColumn("Código");
@@ -98,7 +114,7 @@ class PanelMenuCiclos extends JPanel implements ActionListener, ChangeListener {
     }
     public void addCiclos(DefaultTableModel tableModel) {
         try{
-            //File fl = new File("./txt/datosCiclos.txt");
+
             FileReader rd =new FileReader("./txt/datosCiclos.txt");
             BufferedReader br = new BufferedReader(rd);
             String line = "";

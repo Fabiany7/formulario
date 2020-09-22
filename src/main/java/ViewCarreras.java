@@ -1,9 +1,14 @@
 import javax.swing.*;
+import javax.swing.border.Border;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.plaf.basic.BasicInternalFrameUI;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.io.*;
 import java.util.ArrayList;
 
@@ -30,6 +35,8 @@ class PanelMenuCarrera extends JPanel implements ActionListener, ChangeListener 
     JTextField inJornada;
     JLabel txtSede;
     JTextField inSede;
+    DefaultTableModel tableModel;
+    JTable table;
 
     public PanelMenuCarrera() throws IOException {
         setLayout(null);
@@ -61,16 +68,72 @@ class PanelMenuCarrera extends JPanel implements ActionListener, ChangeListener 
         inSede.setBounds(180, 188, 150, 20);
         add(inSede);
         boton1 = new JButton("AGREGAR");
-        boton1.setBounds(50, 230, 150, 30);
+        boton1.setBounds(50, 450, 150, 30);
         boton1.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         boton1.addActionListener(new AgregarCarrera(inCodigo,inNombre,inJornada,inSede));
         add(boton1);
         boton2 = new JButton("CERRAR");
-        boton2.setBounds(380, 230, 150, 30);
+        boton2.setBounds(380, 450, 150, 30);
         boton2.addActionListener(this);
         boton2.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         add(boton2);
+        tableModel = new DefaultTableModel();
+        table = new JTable(tableModel);
+        //table.getSelectionModel().addListSelectionListener(new SeleccionaCiclo(inCodeCiclo,inNameCiclo));
+        table.getSelectionModel().addListSelectionListener(e -> {
+            if (table.getSelectedRow() > -1){
+                System.out.println(table.getSelectedRow());
+                inNombre.setText(table.getValueAt(table.getSelectedRow(), 1).toString()) ;
+                inCodigo.setText(table.getValueAt(table.getSelectedRow(), 0).toString()) ;
+                inJornada.setText(table.getValueAt(table.getSelectedRow(), 2).toString()) ;
+                inSede.setText(table.getValueAt(table.getSelectedRow(), 3).toString()) ;
+                boton1.setEnabled(false);
+            }
+
+        });
+        table.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                boton1.setEnabled(true);
+            }
+        });
+        tableModel.addColumn("Código");
+        tableModel.addColumn("Nombre");
+        tableModel.addColumn("Jornada");
+        tableModel.addColumn("Sede");
+        addCiclos(tableModel);
+        table.setBounds(150,320, 320,150);
+        Border b = BorderFactory.createLineBorder(Color.black);
+        table.setBorder(b);
+        JInternalFrame ifm= new JInternalFrame();
+        ifm.setBounds(130,230,350,180);
+        JScrollPane sp = new JScrollPane(table);
+        ifm.add(sp);
+        ifm.setVisible(true);
+        BasicInternalFrameUI bi = (BasicInternalFrameUI)ifm.getUI();
+        bi.setNorthPane(null);
+        add(ifm);
     }
+    public void addCiclos(DefaultTableModel tableModel) {
+        try{
+
+            FileReader rd =new FileReader("./txt/datosCarrera.txt");
+            BufferedReader br = new BufferedReader(rd);
+            String line = "";
+            while ((line = br.readLine()) != null ){
+                String[] datos = line.split(";");
+                tableModel.addRow(datos);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
 
     @Override
     public void actionPerformed(ActionEvent e) {
