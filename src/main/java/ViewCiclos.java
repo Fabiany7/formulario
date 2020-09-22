@@ -1,7 +1,12 @@
 import javax.swing.*;
+import javax.swing.border.Border;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.plaf.basic.BasicInternalFrameUI;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -10,13 +15,15 @@ import java.nio.channels.FileChannel;
 import java.nio.channels.FileLock;
 import java.util.ArrayList;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.apache.log4j.Logger;
 
 
 public class ViewCiclos extends JFrame{
 
     public ViewCiclos() throws IOException {
-        setSize(600, 300);
+        setSize(600, 550);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocation(400, 200);
         setTitle("ciclos");
@@ -34,6 +41,8 @@ class PanelMenuCiclos extends JPanel implements ActionListener, ChangeListener {
     JTextField inCodeCiclo;
     JLabel txtNameCiclo;
     JTextField inNameCiclo;
+    DefaultTableModel tableModel;
+    JTable table;
 
     public PanelMenuCiclos() throws IOException {
 
@@ -63,6 +72,43 @@ class PanelMenuCiclos extends JPanel implements ActionListener, ChangeListener {
         boton2.addActionListener(this);
         boton2.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         add(boton2);
+        tableModel = new DefaultTableModel();
+        table = new JTable(tableModel);
+        //table.getSelectionModel().addListSelectionListener(new SeleccionaCiclo(inCodeCiclo,inNameCiclo));
+        table.getSelectionModel().addListSelectionListener(e -> {
+            if (table.getSelectedRow() > -1){
+                inNameCiclo.setText(table.getValueAt(table.getSelectedRow(), 1).toString()) ;
+                inCodeCiclo .setText(table.getValueAt(table.getSelectedRow(), 0).toString()) ;
+            }
+        });
+        tableModel.addColumn("Código");
+        tableModel.addColumn("Descripción");
+        addCiclos(tableModel);
+        table.setBounds(150,320, 320,150);
+        Border b = BorderFactory.createLineBorder(Color.black);
+        table.setBorder(b);
+        JInternalFrame ifm= new JInternalFrame();
+        ifm.setBounds(130,280,350,180);
+        JScrollPane sp = new JScrollPane(table);
+        ifm.add(sp);
+        ifm.setVisible(true);
+        BasicInternalFrameUI bi = (BasicInternalFrameUI)ifm.getUI();
+        bi.setNorthPane(null);
+        add(ifm);
+    }
+    public void addCiclos(DefaultTableModel tableModel) {
+        try{
+            //File fl = new File("./txt/datosCiclos.txt");
+            FileReader rd =new FileReader("./txt/datosCiclos.txt");
+            BufferedReader br = new BufferedReader(rd);
+            String line = "";
+            while ((line = br.readLine()) != null ){
+                String[] datos = line.split(";");
+                tableModel.addRow(datos);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -78,6 +124,7 @@ class PanelMenuCiclos extends JPanel implements ActionListener, ChangeListener {
 
     }
 }
+
 class AgregarCiclo implements ActionListener {
     Writer writer = new FileWriter("./txt/datosCiclos.txt", true);
     Ciclos ciclos = new Ciclos();
