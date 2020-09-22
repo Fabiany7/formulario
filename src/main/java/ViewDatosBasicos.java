@@ -44,12 +44,6 @@ class PanelMenu extends JPanel implements ActionListener, ChangeListener {
     public PanelMenu() throws IOException {
 
         setLayout(null);
-        Reader readerCiclo = new FileReader("./txt/datosCiclos.txt");
-        BufferedReader brCiclo = new BufferedReader(readerCiclo);
-        String lineaCiclo;
-        Reader readerCar = new FileReader("./txt/datosCarrera.txt");
-        BufferedReader brCar = new BufferedReader(readerCar);
-        String lineaCar;
         txtIngreso = new JLabel("FORMULARIO");
         txtIngreso.setBounds(250, 10, 150, 30);
         add(txtIngreso);
