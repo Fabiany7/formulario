@@ -1,0 +1,7 @@
+1;primer;Técnico
+2;segundo;Técnico
+3;tercer;Técnico
+4;cuarto;Técnico
+5;quinto;Tecnológico
+6;sexto;Tecnológico
+7;septimo;Profesional

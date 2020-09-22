@@ -81,7 +81,12 @@ class PanelMenu extends JPanel implements ActionListener, ChangeListener {
         txtGenero.setBounds(60, 200, 150, 30);
         add(txtGenero);
         // combo box actividad economica
-        String s1[] = {"Empleado","Estudiante","Independiente","Trabajador"};
+        String s1[] = {
+                Constantes.EMPLEADO,
+                Constantes.ESTUDIANTE,
+                Constantes.INDEPENDIENTE,
+                Constantes.TRABAJADOR
+        };
         actividades = new JComboBox(s1);
         actividades.setBounds(160,210,150,20);
         add(actividades);
@@ -92,7 +97,7 @@ class PanelMenu extends JPanel implements ActionListener, ChangeListener {
         add(txtGenero);
         // combo box Carrera
         List<String> listaCar = new ArrayList<>();
-        recCarrera().stream().forEach((x) -> listaCar.add(x.split(",")[1]) );
+        datos("carrera").stream().forEach((x) -> listaCar.add(x.split(";")[1]) );
         carreras = new JComboBox(listaCar.toArray());
         carreras.setBounds(160,250,150,20);
         add(carreras);
@@ -103,7 +108,7 @@ class PanelMenu extends JPanel implements ActionListener, ChangeListener {
         add(txtGenero);
         // combo box Semestre
         List<String> listaSem = new ArrayList<>();
-        recCarrera().stream().forEach((x) -> listaSem.add(x.split(",")[1]) );
+        datos("semestre").stream().forEach((x) -> listaSem.add(x.split(";")[1]) );
         semestres = new JComboBox(listaSem.toArray());
         semestres.setBounds(160,290,150,20);
         add(semestres);
@@ -122,31 +127,23 @@ class PanelMenu extends JPanel implements ActionListener, ChangeListener {
 
     }
 
-    public List<String> recSemestre(){
-        List<String> semestres = new ArrayList<>();
-        try {
-            FileReader FR = new FileReader("./txt/datosSemestre.txt");
-            BufferedReader BR = new BufferedReader(FR);
-            String dato = "";
-            while ((dato = BR.readLine() ) != null ){
-                semestres.add(dato);
-            }
-        }catch (IOException e){
-            JOptionPane.showMessageDialog(null,"error al leer semestres " + e.getLocalizedMessage());
-        }
-        return semestres;
-    }
 
-    public List<String> recCarrera(){
+    public List<String> datos(String flat){
 
         List<String> carreras = new ArrayList<>();
+        FileReader FR;
         try {
-            FileReader FR = new FileReader("./txt/datosCarrera.txt");
+            if(flat.equals("semestre")){
+                 FR=new FileReader("./txt/datosSemestre.txt");
+            }else{
+                 FR = new FileReader("./txt/datosCarrera.txt");
+            }
             BufferedReader BR = new BufferedReader(FR);
             String dato = "";
             while ((dato = BR.readLine() ) != null ){
                 carreras.add(dato);
             }
+
         }catch (IOException e){
             JOptionPane.showMessageDialog(null,"error al leer semestres " + e.getLocalizedMessage());
         }
