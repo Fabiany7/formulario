@@ -26,7 +26,7 @@ public class ViewCarreras extends JFrame implements  FocusListener,ActionListene
     DefaultTableModel tableModel;
     JTable table;
 
-    public ViewCarreras() throws IOException {
+    public ViewCarreras(){
         setSize(600, 550);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocation(400, 100);
@@ -65,7 +65,7 @@ public class ViewCarreras extends JFrame implements  FocusListener,ActionListene
         boton1 = new JButton("AGREGAR");
         boton1.setBounds(50, 450, 150, 30);
         boton1.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        boton1.addActionListener(e -> { agregarCarrera(); });
+        boton1.addActionListener(e -> agregarCarrera());
         panel.add(boton1);
         boton2 = new JButton("CERRAR");
         boton2.setBounds(380, 450, 150, 30);
@@ -74,7 +74,7 @@ public class ViewCarreras extends JFrame implements  FocusListener,ActionListene
         panel.add(boton2);
         tableModel = new DefaultTableModel();
         table = new JTable(tableModel);
-        table.getSelectionModel().addListSelectionListener(e -> { selectTabla(); });
+        table.getSelectionModel().addListSelectionListener(e -> selectTabla());
         table.addFocusListener(this);
         tableModel.addColumn("Código");
         tableModel.addColumn("Nombre");
@@ -116,10 +116,11 @@ public class ViewCarreras extends JFrame implements  FocusListener,ActionListene
         carreras.setNombreSede(datos.get(3).getText());
 
         try {
+            assert writer != null;
             writer.write(carreras.getCodigoCarrera() + ";" + carreras.getNombreCarrera() +";" +carreras.getJornada() + ";" + carreras.getNombreSede() + "\n");
             writer.flush();
-            for (int i = 0 ; i < datos.size(); i++){
-                datos.get(i).setText("");
+            for (JTextField dato : datos) {
+                dato.setText("");
             }
         } catch (IOException ioException) {
             ioException.printStackTrace();
@@ -151,7 +152,7 @@ public class ViewCarreras extends JFrame implements  FocusListener,ActionListene
 
             FileReader rd =new FileReader("./txt/datosCarrera.txt");
             BufferedReader br = new BufferedReader(rd);
-            String line = "";
+            String line;
             while ((line = br.readLine()) != null ){
                 String[] datos = line.split(";");
                 tableModel.addRow(datos);
