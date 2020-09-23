@@ -24,7 +24,7 @@ public class ViewMenuPrincipal extends JFrame{
 
 class PanelMenuInicio extends JPanel implements ActionListener, ChangeListener {
 
-    private static final Logger LOGGER = Logger.getLogger(PanelMenuCiclos.class);
+    private static final Logger LOGGER = Logger.getLogger(PanelMenuInicio.class);
     JLabel txtTitulo;
     JButton btnDatos;
     JButton btnCarrera;
@@ -96,18 +96,14 @@ class PanelMenuInicio extends JPanel implements ActionListener, ChangeListener {
             try {
                 viewSemestres = new ViewSemestres();
                 viewSemestres.setVisible(true);
-            } catch (IOException ioException) {
-                ioException.printStackTrace();
+            } catch (IOException e3) {
+                LOGGER.error("ERROR AL OBTENER LA VISTA DE CARRERAS",e3);
             }
         }
         if(btnPulsado == btnCiclos){
             ViewCiclos viewCiclos = null;
-            try {
-                viewCiclos = new ViewCiclos();
-                viewCiclos.setVisible(true);
-            } catch (IOException e3) {
-                LOGGER.error("ERROR AL OBTENER LA VISTA DE CICLO",e3);
-            }
+            viewCiclos = new ViewCiclos();
+            viewCiclos.setVisible(true);
         }
     }
 
