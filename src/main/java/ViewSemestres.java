@@ -12,9 +12,9 @@ public class ViewSemestres extends JFrame{
 
 
     public ViewSemestres() throws IOException {
-        setSize(600, 300);
+        setSize(600, 550);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLocation(400, 200);
+        setLocation(400, 100);
         setTitle("Semestre");
         PanelMenuSemestre panel = new PanelMenuSemestre();
         add(panel);
@@ -61,8 +61,9 @@ class PanelMenuSemestre extends JPanel implements ActionListener, ChangeListener
         inCiclo = new JComboBox();
         inCiclo.setBounds(200, 143, 150, 20);
         while((linea=br.readLine())!=null){
-            if(linea.contains("Nombre")){
-                inCiclo.addItem(linea.substring(14));
+            if(linea.contains(";")){
+                inCiclo.addItem(linea.substring(2));
+
             }
         }
         inCiclo.addActionListener(this);
@@ -87,7 +88,6 @@ class PanelMenuSemestre extends JPanel implements ActionListener, ChangeListener
         if (btnPulsado == boton2) {
             System.exit(1);
         }
-        System.out.println("entra "+ select);
         select = (inCiclo.getSelectedItem().toString());
         AgregarSemestre.actualizaState(select);
     }
