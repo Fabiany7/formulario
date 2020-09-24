@@ -148,6 +148,7 @@ class PanelMenu extends JPanel implements ActionListener, ChangeListener {
         Object btnPulsado = e.getSource();
         if (btnPulsado == boton2) {
             System.exit(1);
+            //dispose();
         }
 
 

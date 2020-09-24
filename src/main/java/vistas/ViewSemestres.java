@@ -14,8 +14,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.awt.Window;
 import java.io.*;
 import java.util.ArrayList;
+
 
 public class ViewSemestres extends JFrame{
 
@@ -24,7 +26,7 @@ public class ViewSemestres extends JFrame{
         setSize(600, 550);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocation(400, 100);
-        setTitle("modelos.Semestre");
+        setTitle("Semestre");
         PanelMenuSemestre panel = new PanelMenuSemestre();
         add(panel);
     }
@@ -53,13 +55,13 @@ class PanelMenuSemestre extends JPanel implements ActionListener, ChangeListener
         txtTitulo = new JLabel("CREAR SEMESTRE");
         txtTitulo.setBounds(250, 10, 150, 30);
         add(txtTitulo);
-        txtCodigo = new JLabel("Codigo modelos.Semestre");
+        txtCodigo = new JLabel("Codigo Semestre");
         txtCodigo.setBounds(60, 55, 150, 30);
         add(txtCodigo);
         inCodigo = new JTextField();
         inCodigo.setBounds(200, 58, 150, 20);
         add(inCodigo);
-        txtNombre = new JLabel("Nombre modelos.Semestre");
+        txtNombre = new JLabel("Nombre Semestre");
         txtNombre.setBounds(60, 95, 150, 30);
         add(txtNombre);
         inNombre = new JTextField();
@@ -114,7 +116,7 @@ class PanelMenuSemestre extends JPanel implements ActionListener, ChangeListener
             }
         });
         tableModel.addColumn("Código");
-        tableModel.addColumn("Nombre modelos.Semestre");
+        tableModel.addColumn("Nombre Semestre");
         tableModel.addColumn("Ciclo");
         addCiclos(tableModel);
         table.setBounds(150,320, 320,150);
@@ -151,6 +153,7 @@ class PanelMenuSemestre extends JPanel implements ActionListener, ChangeListener
         Object btnPulsado = e.getSource();
         if (btnPulsado == boton2) {
             System.exit(1);
+            //dispose();
         }
         select = (inCiclo.getSelectedItem().toString());
         AgregarSemestre.actualizaState(select);

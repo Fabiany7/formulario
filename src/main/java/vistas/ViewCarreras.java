@@ -171,7 +171,8 @@ public class ViewCarreras extends JFrame implements  FocusListener,ActionListene
     public void actionPerformed(ActionEvent e) {
         Object btnPulsado = e.getSource();
         if (btnPulsado == boton2) {
-            System.exit(1);
+            //System.exit(1);
+            dispose();
         }
     }
 }

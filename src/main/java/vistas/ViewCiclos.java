@@ -134,7 +134,8 @@ public class ViewCiclos extends JFrame implements  FocusListener{
     private void salida(ActionEvent e) {
         Object btnPulsado = e.getSource();
         if (btnPulsado == boton2) {
-            System.exit(1);
+            //System.exit(1);
+            dispose();
         }
     }
 
