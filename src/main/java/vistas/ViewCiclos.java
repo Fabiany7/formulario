@@ -10,6 +10,8 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.io.*;
 
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 
 import modelos.Ciclos;
@@ -23,6 +25,8 @@ public class ViewCiclos extends JFrame implements  FocusListener{
     JLabel txtTitulo;
     JButton boton1;
     JButton boton2;
+    JButton boton3;
+    JButton boton4;
     JLabel txtCodeCiclo;
     JTextField inCodeCiclo;
     JLabel txtNameCiclo;
@@ -56,12 +60,22 @@ public class ViewCiclos extends JFrame implements  FocusListener{
         inNameCiclo.setBounds(180, 98, 150, 20);
         panel.add(inNameCiclo);
         boton1 = new JButton("AGREGAR");
-        boton1.setBounds(50, 430, 150, 30);
+        boton1.setBounds(40, 430, 110, 30);
         boton1.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         boton1.addActionListener(e -> {agregar();});
         panel.add(boton1);
+        boton4 = new JButton("ACTUALIZAR");
+        boton4.setBounds(170, 430, 110, 30);
+        boton4.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        boton4.addActionListener(e -> { actualizaDatos(); });
+        panel.add(boton4);
+        boton3 = new JButton("BORRAR");
+        boton3.setBounds(300, 430, 110, 30);
+        boton3.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        boton3.addActionListener(e -> { borrarDatos(); });
+        panel.add(boton3);
         boton2 = new JButton("CERRAR");
-        boton2.setBounds(380, 430, 150, 30);
+        boton2.setBounds(430, 430, 110, 30);
         boton2.addActionListener(e -> {salida(e);});
         boton2.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         panel.add(boton2);
@@ -113,8 +127,15 @@ public class ViewCiclos extends JFrame implements  FocusListener{
         try {
             writer.write(ciclos.getCodigoCiclo() + ";" + ciclos.getNombreCiclo() + "\n");
             writer.flush();
+            writer.close();
             datos.get(0).setText("");
             datos.get(1).setText("");
+            if (this.tableModel.getRowCount() > 0){
+                for (int i = this.tableModel.getRowCount() -1; i >= 0 ; i--){
+                    this.tableModel.removeRow(i);
+                }
+            }
+            addCiclos(this.tableModel);
         } catch (IOException e1) {
             LOGGER.error("ERROR AL INTENTAR OBTENER EL RECURSO ",e1);
         }
@@ -148,8 +169,82 @@ public class ViewCiclos extends JFrame implements  FocusListener{
                 String[] datos = line.split(";");
                 tableModel.addRow(datos);
             }
+            rd.close();
         } catch (Exception e) {
             LOGGER.error("ERROR AL INTENTAR OBTENER EL RECURSO DATACICLOS ",e);
+        }
+    }
+
+    public void borrarDatos(){
+        String codigo = "";
+        codigo = this.inCodeCiclo.getText();
+        try {
+            File fl = new File("./txt/datosCiclos.txt");
+            File flt = new File("./txt/datosCiclosTemp.txt");
+            FileReader fr = new FileReader(fl);
+            FileWriter fw = new FileWriter(flt);
+            BufferedReader br = new BufferedReader(fr);
+            String line= "";
+            while (( line = br.readLine()) != null){
+                String[] datos = line.split(";");
+                if (!datos[0].equals(codigo)){
+                    fw.write(line + '\n');
+                }
+            }
+            br.close();
+            fr.close();
+            fw.close();
+            Files.copy(flt.toPath(), fl.toPath(), StandardCopyOption.REPLACE_EXISTING);
+            flt.delete();
+            if (this.tableModel.getRowCount() > 0){
+                for (int i = this.tableModel.getRowCount() -1; i >= 0 ; i--){
+                    this.tableModel.removeRow(i);
+                }
+            }
+            addCiclos(this.tableModel);
+        }catch (IOException io){
+            io.printStackTrace();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+    }
+
+    public void actualizaDatos(){
+        String codigo = "";
+        String valor = "";
+        codigo = this.inCodeCiclo.getText();
+        valor = this.inNameCiclo.getText();
+        try {
+            File fl = new File("./txt/datosCiclos.txt");
+            File flt = new File("./txt/datosCiclosTemp.txt");
+            FileReader fr = new FileReader(fl);
+            FileWriter fw = new FileWriter(flt);
+            BufferedReader br = new BufferedReader(fr);
+            String line= "";
+            while (( line = br.readLine()) != null){
+                String[] datos = line.split(";");
+                if (!datos[0].equals(codigo)){
+                    fw.write(line + '\n');
+                }else {
+                    fw.write(codigo+";"+valor + '\n');
+                }
+            }
+            br.close();
+            fr.close();
+            fw.close();
+            Files.copy(flt.toPath(), fl.toPath(), StandardCopyOption.REPLACE_EXISTING);
+            flt.delete();
+            if (this.tableModel.getRowCount() > 0){
+                for (int i = this.tableModel.getRowCount() -1; i >= 0 ; i--){
+                    this.tableModel.removeRow(i);
+                }
+            }
+            addCiclos(this.tableModel);
+        }catch (IOException io){
+            io.printStackTrace();
+        }catch (Exception e){
+            e.printStackTrace();
         }
     }
 }
