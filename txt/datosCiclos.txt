@@ -5,5 +5,3 @@
 5;Maestria
 6;superMaestria
 7;pruebas clases
-8;mas pruebas
-9;pruebas fabiany es gay
