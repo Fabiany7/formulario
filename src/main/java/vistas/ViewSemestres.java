@@ -16,6 +16,8 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.Window;
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 
 
@@ -41,6 +43,8 @@ class PanelMenuSemestre extends JPanel implements ActionListener, ChangeListener
     JLabel txtTitulo;
     JButton boton1;
     JButton boton2;
+    JButton boton3;
+    JButton boton4;
     JLabel txtCodigo;
     JTextField inCodigo;
     JLabel txtNombre;
@@ -81,18 +85,27 @@ class PanelMenuSemestre extends JPanel implements ActionListener, ChangeListener
         inCiclo.addActionListener(this);
         add(inCiclo);
         boton1 = new JButton("AGREGAR");
-        boton1.setBounds(50, 430, 150, 30);
+        boton1.setBounds(40, 430, 110, 30);
         boton1.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         boton1.addActionListener(new AgregarSemestre(inCodigo,inNombre));
         add(boton1);
+        boton4 = new JButton("ACTUALIZAR");
+        boton4.setBounds(170, 430, 110, 30);
+        boton4.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        boton4.addActionListener(e -> { actualizaDatos(); });
+        add(boton4);
+        boton3 = new JButton("BORRAR");
+        boton3.setBounds(300, 430, 110, 30);
+        boton3.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        boton3.addActionListener(e -> { borrarDatos(); });
+        add(boton3);
         boton2 = new JButton("CERRAR");
-        boton2.setBounds(380, 430, 150, 30);
+        boton2.setBounds(430, 430, 110, 30);
         boton2.addActionListener(this);
         boton2.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         add(boton2);
         tableModel = new DefaultTableModel();
         table = new JTable(tableModel);
-        //table.getSelectionModel().addListSelectionListener(new SeleccionaCiclo(inCodeCiclo,inNameCiclo));
         table.getSelectionModel().addListSelectionListener(e -> {
             if (table.getSelectedRow() > -1){
                 System.out.println(table.getSelectedRow());
@@ -143,6 +156,7 @@ class PanelMenuSemestre extends JPanel implements ActionListener, ChangeListener
                 String[] datos = line.split(";");
                 tableModel.addRow(datos);
             }
+            rd.close();
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -162,6 +176,83 @@ class PanelMenuSemestre extends JPanel implements ActionListener, ChangeListener
     @Override
     public void stateChanged(ChangeEvent e) {
 
+    }
+
+    public void borrarDatos(){
+        String codigo = "";
+        codigo = this.inCodigo.getText();
+        try {
+            File fl = new File("./txt/datosSemestre.txt");
+            File flt = new File("./txt/datosSemestreTemp.txt");
+            FileReader fr = new FileReader(fl);
+            FileWriter fw = new FileWriter(flt);
+            BufferedReader br = new BufferedReader(fr);
+            String line= "";
+            while (( line = br.readLine()) != null){
+                String[] datos = line.split(";");
+                if (!datos[0].equals(codigo)){
+                    fw.write(line + '\n');
+                }
+            }
+            br.close();
+            fr.close();
+            fw.close();
+            Files.copy(flt.toPath(), fl.toPath(), StandardCopyOption.REPLACE_EXISTING);
+            flt.delete();
+            if (this.tableModel.getRowCount() > 0){
+                for (int i = this.tableModel.getRowCount() -1; i >= 0 ; i--){
+                    this.tableModel.removeRow(i);
+                }
+            }
+            addCiclos(this.tableModel);
+        }catch (IOException io){
+            io.printStackTrace();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+    }
+
+    public void actualizaDatos(){
+        String codigo = "";
+        String valor = "";
+        String ciclo = "";
+        codigo = this.inCodigo.getText();
+        valor = this.inNombre.getText();
+        ciclo = this.inCiclo.getSelectedItem().toString();
+        try {
+            File fl = new File("./txt/datosSemestre.txt");
+            File flt = new File("./txt/datosSemestreTemp.txt");
+            FileReader fr = new FileReader(fl);
+            FileWriter fw = new FileWriter(flt);
+            BufferedReader br = new BufferedReader(fr);
+            String line= "";
+            while (( line = br.readLine()) != null){
+                String[] datos = line.split(";");
+                if (!datos[0].equals(codigo)){
+                    fw.write(line + '\n');
+                }else {
+                    fw.write(codigo+";"+valor +";"+ciclo+ '\n');
+                }
+            }
+
+            br.close();
+            fr.close();
+            fw.close();
+            Files.copy(flt.toPath(), fl.toPath(), StandardCopyOption.REPLACE_EXISTING);
+            flt.delete();
+            if (this.tableModel.getRowCount() > 0){
+                for (int i = this.tableModel.getRowCount() -1; i >= 0 ; i--){
+                    this.tableModel.removeRow(i);
+                }
+            }
+            System.out.println("test llega despues");
+            addCiclos(this.tableModel);
+        }catch (IOException io){
+            io.printStackTrace();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
 }

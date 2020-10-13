@@ -12,6 +12,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 
 public class ViewCarreras extends JFrame implements  FocusListener,ActionListener{
@@ -19,6 +21,8 @@ public class ViewCarreras extends JFrame implements  FocusListener,ActionListene
     JLabel txtTitulo;
     JButton boton1;
     JButton boton2;
+    JButton boton3;
+    JButton boton4;
     JLabel txtCodigo;
     JTextField inCodigo;
     JLabel txtNombre;
@@ -67,12 +71,22 @@ public class ViewCarreras extends JFrame implements  FocusListener,ActionListene
         inSede.setBounds(180, 188, 150, 20);
         panel.add(inSede);
         boton1 = new JButton("AGREGAR");
-        boton1.setBounds(50, 450, 150, 30);
+        boton1.setBounds(40, 430, 110, 30);
         boton1.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         boton1.addActionListener(e -> agregarCarrera());
         panel.add(boton1);
+        boton4 = new JButton("ACTUALIZAR");
+        boton4.setBounds(170, 430, 110, 30);
+        boton4.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        boton4.addActionListener(e -> { actualizaDatos(); });
+        panel.add(boton4);
+        boton3 = new JButton("BORRAR");
+        boton3.setBounds(300, 430, 110, 30);
+        boton3.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        boton3.addActionListener(e -> { borrarDatos(); });
+        panel.add(boton3);
         boton2 = new JButton("CERRAR");
-        boton2.setBounds(380, 450, 150, 30);
+        boton2.setBounds(430, 430, 110, 30);
         boton2.addActionListener(this);
         boton2.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         panel.add(boton2);
@@ -123,9 +137,13 @@ public class ViewCarreras extends JFrame implements  FocusListener,ActionListene
             assert writer != null;
             writer.write(carreras.getCodigoCarrera() + ";" + carreras.getNombreCarrera() +";" +carreras.getJornada() + ";" + carreras.getNombreSede() + "\n");
             writer.flush();
-            for (JTextField dato : datos) {
-                dato.setText("");
+            writer.close();
+            if (this.tableModel.getRowCount() > 0){
+                for (int i = this.tableModel.getRowCount() -1; i >= 0 ; i--){
+                    this.tableModel.removeRow(i);
+                }
             }
+            addCiclos(this.tableModel);
         } catch (IOException ioException) {
             ioException.printStackTrace();
         }
@@ -173,6 +191,83 @@ public class ViewCarreras extends JFrame implements  FocusListener,ActionListene
         if (btnPulsado == boton2) {
             //System.exit(1);
             dispose();
+        }
+    }
+
+    public void borrarDatos(){
+        String codigo = "";
+        codigo = this.inCodigo.getText();
+        try {
+            File fl = new File("./txt/datosCarrera.txt");
+            File flt = new File("./txt/datosCarreraTemp.txt");
+            FileReader fr = new FileReader(fl);
+            FileWriter fw = new FileWriter(flt);
+            BufferedReader br = new BufferedReader(fr);
+            String line= "";
+            while (( line = br.readLine()) != null){
+                String[] datos = line.split(";");
+                if (!datos[0].equals(codigo)){
+                    fw.write(line + '\n');
+                }
+            }
+            br.close();
+            fr.close();
+            fw.close();
+            Files.copy(flt.toPath(), fl.toPath(), StandardCopyOption.REPLACE_EXISTING);
+            flt.delete();
+            if (this.tableModel.getRowCount() > 0){
+                for (int i = this.tableModel.getRowCount() -1; i >= 0 ; i--){
+                    this.tableModel.removeRow(i);
+                }
+            }
+            addCiclos(this.tableModel);
+        }catch (IOException io){
+            io.printStackTrace();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+    }
+
+    public void actualizaDatos(){
+        String codigo = "";
+        String valor = "";
+        String jornada = "";
+        String sede = "";
+        codigo = this.inCodigo.getText();
+        valor = this.inNombre.getText();
+        jornada =  this.inJornada.getText();
+        sede =  this.inSede.getText();
+        try {
+            File fl = new File("./txt/datosCarrera.txt");
+            File flt = new File("./txt/datosCarreraTemp.txt");
+            FileReader fr = new FileReader(fl);
+            FileWriter fw = new FileWriter(flt);
+            BufferedReader br = new BufferedReader(fr);
+            String line= "";
+            while (( line = br.readLine()) != null){
+                String[] datos = line.split(";");
+                if (!datos[0].equals(codigo)){
+                    fw.write(line + '\n');
+                }else {
+                    fw.write(codigo+";"+valor +";"+jornada + ";"+sede+ '\n');
+                }
+            }
+            br.close();
+            fr.close();
+            fw.close();
+            Files.copy(flt.toPath(), fl.toPath(), StandardCopyOption.REPLACE_EXISTING);
+            flt.delete();
+            if (this.tableModel.getRowCount() > 0){
+                for (int i = this.tableModel.getRowCount() -1; i >= 0 ; i--){
+                    this.tableModel.removeRow(i);
+                }
+            }
+            addCiclos(this.tableModel);
+        }catch (IOException io){
+            io.printStackTrace();
+        }catch (Exception e){
+            e.printStackTrace();
         }
     }
 }
